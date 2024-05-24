@@ -1,3 +1,5 @@
+import { TreeHtml } from "./treeHtml.class.js";
+
 export class TreeEventHandler {
   constructor(httpClient, options, inject, buildHtmlAndInject) {
     this.httpClient = httpClient;
@@ -11,7 +13,7 @@ export class TreeEventHandler {
     this.doubleClick = this.doubleClick.bind(this);
     this.contextMenu = this.contextMenu.bind(this);
     this.contextReload = this.contextReload.bind(this);
-    this.contextOpen = this.contextOpen.bind(this);
+    this.contextAdd = this.contextAdd.bind(this);
     this.contextOptions = this.contextOptions.bind(this);
     this.toggleDarkMode = this.toggleDarkMode.bind(this);
     this.initEvents();
@@ -73,10 +75,7 @@ export class TreeEventHandler {
     }
     .nodeAttContainer, .nodeAttContainer div, .nodeAttContainer p {
         cursor: pointer;
-      
     }
- 
-   
     .context-menu {
         display: none;
         position: absolute;
@@ -297,7 +296,6 @@ export class TreeEventHandler {
       document.querySelectorAll(".nodeAttContainer").forEach((elem) => {
         elem.classList.remove("selected");
       });
-      eval(this.click);
       if (isParent) {
         target.classList.add("selected");
       } else if (parentChild) {
@@ -364,10 +362,12 @@ export class TreeEventHandler {
     contextMenu.innerHTML = `
       <ul>
         <li class="reload">Reload</li>
-        <li class="open">Open</li>
-        <li class="options">Options</li>
+        
       </ul>
     `;
+    // <li class="add">Add</li>
+    // <li class="options">Options</li>
+
     document.body.appendChild(contextMenu);
 
     document.addEventListener("click", () => {
@@ -377,12 +377,12 @@ export class TreeEventHandler {
     contextMenu.querySelector(".reload").addEventListener("click", (event) => {
       this.contextReload(event);
     });
-    contextMenu.querySelector(".open").addEventListener("click", (event) => {
-      this.contextOpen(event);
-    });
-    contextMenu.querySelector(".options").addEventListener("click", (event) => {
-      this.contextOptions(event);
-    });
+    // contextMenu.querySelector(".add").addEventListener("click", (event) => {
+    //   this.contextAdd(event);
+    // });
+    // contextMenu.querySelector(".options").addEventListener("click", (event) => {
+    //   this.contextOptions(event);
+    // });
   }
 
   contextReload() {
@@ -398,12 +398,33 @@ export class TreeEventHandler {
     document.querySelector(".context-menu").classList.remove("active");
   }
 
-  contextOpen() {
+  contextAdd() {
     const selectedItem = document.querySelector(".selected");
     if (selectedItem) {
-      console.log(selectedItem.querySelector(".textValue").innerHTML);
+      const arrowClick = selectedItem.querySelector(".DropdownBtn");
+      if (arrowClick) {
+        this.handleClick({ target: arrowClick });
+      }
+
+      const newId = `new-node-${Date.now()}`; // Generate a unique ID for the new node
+      const newNode = new TreeHtml(
+        newId,
+        "New Node", // You can change this to whatever default value you need
+        {}, // Empty dataResponse for the new node
+        "default-icon.png", // Default icon
+        "default-status-icon.png", // Default status icon
+        "", // Base URL (if needed)
+        false // Whether the new node has children
+      );
+      const checkUl = selectedItem.closest("li").querySelector("ul");
+      if (checkUl) {
+        checkUl.innerHTML += newNode.htmlUlTpl(); // Append the new node to the existing ul
+      } else {
+        selectedItem.closest(
+          "li"
+        ).innerHTML += `<ul>${newNode.htmlUlTpl()}</ul>`; // Create a new ul and append the new node
+      }
     }
-    document.querySelector(".context-menu").classList.remove("active");
   }
 
   contextOptions() {
@@ -412,7 +433,6 @@ export class TreeEventHandler {
       const modal = document.querySelector("#optionsModal");
       modal.style.display = "block";
 
-      // Populate modal with selected item data if needed
       const colorInput = modal.querySelector("#colorInput");
       const commentInput = modal.querySelector("#commentInput");
       const applyButton = modal.querySelector("#applyButton");

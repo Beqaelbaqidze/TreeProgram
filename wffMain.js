@@ -6,12 +6,22 @@ const dbclick = document
 const contextMenu = document
   .querySelector("#treeContainer")
   .getAttribute("contextMenu");
-console.log(click);
+const WFFType = document
+  .querySelector("#treeContainer")
+  .getAttribute("WFFType");
+const treeLink = document
+  .querySelector("#treeContainer")
+  .getAttribute("treeLink");
+const baseUrl = document
+  .querySelector("#treeContainer")
+  .getAttribute("baseUrl");
+const label = document.querySelector("#treeContainer").getAttribute("label");
+
 const options = {
-  baseUrl: BaseUrl,
-  url: BaseUrl + "?FRAME_NAME=CADTREE.BROWSER.JSON&PRNT_ID",
+  baseUrl: baseUrl,
+  url: baseUrl + treeLink,
   rootElement: "#treeContainer",
-  labels: "name",
+  labels: label,
   click: click,
   dbclick: dbclick,
   contextMenu: contextMenu,

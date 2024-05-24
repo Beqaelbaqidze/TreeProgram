@@ -140,7 +140,15 @@
     </style>
   </head>
   <body>
-    <div id="treeContainer" click="foo(target)" dbclick="foo(target)"></div>
+    <div
+      id="treeContainer"
+      WFFType="TreeView"
+      treeLink="?FRAME_NAME=CADTREE.BROWSER.JSON&PRNT_ID"
+      baseUrl="https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree"
+      label="name"
+      click="foo(target)"
+      dbclick="foo(target)"
+    ></div>
     <script type="module" src="wffMain.js"></script>
     <script>
       function foo(target) {
