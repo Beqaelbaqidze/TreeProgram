@@ -24,6 +24,6 @@ const options = {
   labels: label,
   click: click,
   dbclick: dbclick,
-  contextMenu: contextMenu.split("; "),
+  contextMenu: contextMenu ? contextMenu.split("; ") : "",
 };
 const mainTree = new MainTree(options);

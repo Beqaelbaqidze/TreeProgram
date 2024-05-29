@@ -13,7 +13,7 @@ export class MainTree {
   constructor(options) {
     this.options = options;
     this.#labelKeys = options.labels
-      ? options.labels.split(", ").map((key) => key.trim())
+      ? options.labels.split("; ").map((key) => key.trim())
       : ["name"];
     this.#chngHtml = options.html;
     this.#rootElement = document.querySelector(options.rootElement);

@@ -12,8 +12,9 @@ export class TreeEventHandler {
     this.handleClick = this.handleClick.bind(this);
     this.oneClick = this.oneClick.bind(this);
     this.doubleClick = this.doubleClick.bind(this);
-
-    this.contextMenuHandler = new ContextMenuHandler(options);
+    if (!this.options.contextMenu == "") {
+      this.contextMenuHandler = new ContextMenuHandler(options);
+    }
     this.initEvents();
     this.addStyles();
   }
@@ -25,9 +26,11 @@ export class TreeEventHandler {
       vRootElement.addEventListener("click", this.handleClick);
       vRootElement.addEventListener("click", this.oneClick);
       vRootElement.addEventListener("dblclick", this.doubleClick);
-      vRootElement.addEventListener("contextmenu", (event) =>
-        this.contextMenuHandler.contextMenu(event)
-      );
+      if (!this.options.contextMenu == "") {
+        vRootElement.addEventListener("contextmenu", (event) =>
+          this.contextMenuHandler.contextMenu(event)
+        );
+      }
 
       this.addClasses(vRootElement);
     } else {
