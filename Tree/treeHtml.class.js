@@ -30,7 +30,9 @@ export class TreeHtml {
       return this.stringHtml;
     } else {
       return `<li id="liNode" ${this.responseBuild()}>
-                <div class="nodeAttContainer" data-id="${this.id}">
+                <div class="nodeAttContainer" data-id="${
+                  this.id
+                } ${this.responseBuild()}">
                   <button class="DropdownBtn" data-id="${this.id}">
                     ${
                       this.hasChildren

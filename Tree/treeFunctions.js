@@ -249,7 +249,7 @@ export class TreeEventHandler {
   async handleClick(event) {
     const target = event.target;
 
-    if (target.classList.contains("arrow")) {
+    if (target.classList.contains("arrow") || target.closest(".arrow")) {
       const root = target.closest("li");
       const ul = root ? root.querySelector("ul") : null;
       const arrow = target.classList.contains("arrow")
@@ -365,6 +365,7 @@ export class TreeEventHandler {
         
       </ul>
     `;
+
     // <li class="add">Add</li>
     // <li class="options">Options</li>
 
@@ -377,6 +378,7 @@ export class TreeEventHandler {
     contextMenu.querySelector(".reload").addEventListener("click", (event) => {
       this.contextReload(event);
     });
+
     // contextMenu.querySelector(".add").addEventListener("click", (event) => {
     //   this.contextAdd(event);
     // });
@@ -390,7 +392,7 @@ export class TreeEventHandler {
     if (selectedItem) {
       const childUl = selectedItem.closest("li").querySelector("ul");
       if (childUl) {
-        childUl.innerHTML = "";
+        childUl.remove();
         selectedItem.querySelector(".arrow").classList.remove("rotated");
         selectedItem.querySelector(".arrow").classList.remove("loaded");
       }
@@ -479,6 +481,7 @@ export class TreeEventHandler {
 
   createDarkModeToggle() {
     const toggleButton = document.createElement("button");
+    toggleButton.style.display = "none";
     toggleButton.innerText = "Toggle Dark Mode";
     toggleButton.style.position = "fixed";
     toggleButton.style.top = "10px";

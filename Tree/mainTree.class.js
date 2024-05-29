@@ -5,14 +5,16 @@ import { TreeEventHandler } from "./treeFunctions.js";
 export class MainTree {
   #httpClient;
   #treeData = [];
-  #labelKey;
+  #labelKeys;
   #chngHtml;
   #rootElement;
   #eventHandler;
 
   constructor(options) {
     this.options = options;
-    this.#labelKey = options.labels || "name";
+    this.#labelKeys = options.labels
+      ? options.labels.split(", ").map((key) => key.trim())
+      : ["name"];
     this.#chngHtml = options.html;
     this.#rootElement = document.querySelector(options.rootElement);
     this.#httpClient = new HttpClass();
@@ -40,7 +42,7 @@ export class MainTree {
     const extraHtml = this.#chngHtml;
     const html = this.#treeData
       .map((node) => {
-        const label = node[this.#labelKey];
+        const label = this.#labelKeys.map((key) => node[key]).join(", ");
         const treeHtml = new TreeHtml(
           node.id,
           label,
