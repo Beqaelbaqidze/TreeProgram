@@ -144,16 +144,33 @@
       id="treeContainer"
       WFFType="TreeView"
       treeLink="?FRAME_NAME=CADTREE.BROWSER.JSON&PRNT_ID"
-      baseUrl="https://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree"
+      baseUrl="http://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree"
       label="name, text"
       click="foo(target)"
       dbclick="foo(target)"
+      contextMenu="reload: reload(); add: add();"
     ></div>
+    <div id="ViewSection" WFFType="ViewSection"></div>
     <script type="module" src="wffMain.js"></script>
     <script>
       function foo(target) {
         const dataId = target.getAttribute("name");
         console.log(dataId);
+      }
+      function reload() {
+        const selectedItem = document.querySelector(".selected");
+        if (selectedItem) {
+          const childUl = selectedItem.closest("li").querySelector("ul");
+          if (childUl) {
+            childUl.remove();
+            selectedItem.querySelector(".arrow").classList.remove("rotated");
+            selectedItem.querySelector(".arrow").classList.remove("loaded");
+          }
+        }
+        document.querySelector(".context-menu").classList.remove("active");
+      }
+      function add() {
+        alert("add");
       }
     </script>
   </body>

@@ -1,3 +1,4 @@
+import { ContextMenuHandler } from "./contextMenu.class.js";
 import { TreeHtml } from "./treeHtml.class.js";
 
 export class TreeEventHandler {
@@ -11,16 +12,10 @@ export class TreeEventHandler {
     this.handleClick = this.handleClick.bind(this);
     this.oneClick = this.oneClick.bind(this);
     this.doubleClick = this.doubleClick.bind(this);
-    this.contextMenu = this.contextMenu.bind(this);
-    this.contextReload = this.contextReload.bind(this);
-    this.contextAdd = this.contextAdd.bind(this);
-    this.contextOptions = this.contextOptions.bind(this);
-    this.toggleDarkMode = this.toggleDarkMode.bind(this);
+
+    this.contextMenuHandler = new ContextMenuHandler(options);
     this.initEvents();
     this.addStyles();
-    this.createContextMenu();
-    this.createModal();
-    this.createDarkModeToggle();
   }
 
   initEvents() {
@@ -30,7 +25,9 @@ export class TreeEventHandler {
       vRootElement.addEventListener("click", this.handleClick);
       vRootElement.addEventListener("click", this.oneClick);
       vRootElement.addEventListener("dblclick", this.doubleClick);
-      vRootElement.addEventListener("contextmenu", this.contextMenu);
+      vRootElement.addEventListener("contextmenu", (event) =>
+        this.contextMenuHandler.contextMenu(event)
+      );
 
       this.addClasses(vRootElement);
     } else {
@@ -324,175 +321,5 @@ export class TreeEventHandler {
     if (isParent || parentChild) {
       eval(this.dbclick);
     }
-  }
-
-  contextMenu(event) {
-    event.preventDefault();
-    const target = event.target;
-    const isParent = target.classList.contains("nodeAttContainer");
-    const parentChild = target.closest(".nodeAttContainer");
-    const childChild = target.closest("div")?.closest(".nodeAttContainer");
-
-    if (isParent || parentChild || childChild) {
-      document.querySelectorAll(".nodeAttContainer").forEach((elem) => {
-        elem.classList.remove("selected");
-      });
-
-      if (isParent) {
-        target.classList.add("selected");
-      } else if (parentChild) {
-        parentChild.classList.add("selected");
-      } else if (childChild) {
-        childChild.classList.add("selected");
-      }
-
-      const contextMenu = document.querySelector(".context-menu");
-      contextMenu.style.top = `${event.clientY}px`;
-      contextMenu.style.left = `${event.clientX}px`;
-      contextMenu.classList.add("active");
-      contextMenu.targetElement = target;
-    } else {
-      document.querySelector(".context-menu").classList.remove("active");
-    }
-  }
-
-  createContextMenu() {
-    const contextMenu = document.createElement("div");
-    contextMenu.className = "context-menu";
-    contextMenu.innerHTML = `
-      <ul>
-        <li class="reload">Reload</li>
-        
-      </ul>
-    `;
-
-    // <li class="add">Add</li>
-    // <li class="options">Options</li>
-
-    document.body.appendChild(contextMenu);
-
-    document.addEventListener("click", () => {
-      contextMenu.classList.remove("active");
-    });
-
-    contextMenu.querySelector(".reload").addEventListener("click", (event) => {
-      this.contextReload(event);
-    });
-
-    // contextMenu.querySelector(".add").addEventListener("click", (event) => {
-    //   this.contextAdd(event);
-    // });
-    // contextMenu.querySelector(".options").addEventListener("click", (event) => {
-    //   this.contextOptions(event);
-    // });
-  }
-
-  contextReload() {
-    const selectedItem = document.querySelector(".selected");
-    if (selectedItem) {
-      const childUl = selectedItem.closest("li").querySelector("ul");
-      if (childUl) {
-        childUl.remove();
-        selectedItem.querySelector(".arrow").classList.remove("rotated");
-        selectedItem.querySelector(".arrow").classList.remove("loaded");
-      }
-    }
-    document.querySelector(".context-menu").classList.remove("active");
-  }
-
-  contextAdd() {
-    const selectedItem = document.querySelector(".selected");
-    if (selectedItem) {
-      const arrowClick = selectedItem.querySelector(".DropdownBtn");
-      if (arrowClick) {
-        this.handleClick({ target: arrowClick });
-      }
-
-      const newId = `new-node-${Date.now()}`; // Generate a unique ID for the new node
-      const newNode = new TreeHtml(
-        newId,
-        "New Node", // You can change this to whatever default value you need
-        {}, // Empty dataResponse for the new node
-        "default-icon.png", // Default icon
-        "default-status-icon.png", // Default status icon
-        "", // Base URL (if needed)
-        false // Whether the new node has children
-      );
-      const checkUl = selectedItem.closest("li").querySelector("ul");
-      if (checkUl) {
-        checkUl.innerHTML += newNode.htmlUlTpl(); // Append the new node to the existing ul
-      } else {
-        selectedItem.closest(
-          "li"
-        ).innerHTML += `<ul>${newNode.htmlUlTpl()}</ul>`; // Create a new ul and append the new node
-      }
-    }
-  }
-
-  contextOptions() {
-    const selectedItem = document.querySelector(".selected");
-    if (selectedItem) {
-      const modal = document.querySelector("#optionsModal");
-      modal.style.display = "block";
-
-      const colorInput = modal.querySelector("#colorInput");
-      const commentInput = modal.querySelector("#commentInput");
-      const applyButton = modal.querySelector("#applyButton");
-
-      applyButton.onclick = () => {
-        const newColor = colorInput.value;
-        const comment = commentInput.value;
-        selectedItem.style.color = newColor;
-        selectedItem.setAttribute("data-comment", comment);
-        modal.style.display = "none";
-      };
-
-      const closeButton = modal.querySelector(".close");
-      closeButton.onclick = () => {
-        modal.style.display = "none";
-      };
-
-      window.onclick = (event) => {
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-      };
-    }
-    document.querySelector(".context-menu").classList.remove("active");
-  }
-
-  createModal() {
-    const modal = document.createElement("div");
-    modal.id = "optionsModal";
-    modal.className = "modal";
-    modal.innerHTML = `
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Options</h2>
-        <label for="colorInput">Change Color:</label>
-        <input type="color" id="colorInput" name="colorInput"><br><br>
-        <label for="commentInput">Add Comment:</label>
-        <textarea id="commentInput" name="commentInput"></textarea><br><br>
-        <button id="applyButton">Apply</button>
-      </div>
-    `;
-    document.body.appendChild(modal);
-  }
-
-  createDarkModeToggle() {
-    const toggleButton = document.createElement("button");
-    toggleButton.style.display = "none";
-    toggleButton.innerText = "Toggle Dark Mode";
-    toggleButton.style.position = "fixed";
-    toggleButton.style.top = "10px";
-    toggleButton.style.right = "10px";
-    toggleButton.style.zIndex = "1000";
-    document.body.appendChild(toggleButton);
-
-    toggleButton.addEventListener("click", this.toggleDarkMode);
-  }
-
-  toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
   }
 }
