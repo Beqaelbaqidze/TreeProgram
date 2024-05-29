@@ -8,6 +8,7 @@ export class TreeHtml {
     statusIcon,
     baseUrl,
     hasChildren,
+    nodeElement,
     stringHtml = ""
   ) {
     this.id = id;
@@ -18,6 +19,7 @@ export class TreeHtml {
     this.baseUrl = baseUrl;
     this.hasChildren = hasChildren;
     this.stringHtml = stringHtml;
+    this.nodeElement = nodeElement;
   }
 
   responseBuild() {
@@ -56,7 +58,9 @@ export class TreeHtml {
                     <img src="${this.baseUrl + this.icon}">
                     <img src="${this.baseUrl + this.statusIcon}">
                   </div>
-                  <p class="textValue" ${this.responseBuild()}>${this.value}</p>
+                  <span class="textValue" ${this.responseBuild()}><p class="textValue">${
+        this.value
+      }</p>${this.nodeElement} </span>
                 </div>
               </li>`;
     }

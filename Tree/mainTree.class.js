@@ -51,6 +51,7 @@ export class MainTree {
           node.statusIcon,
           this.options.baseUrl,
           node.hasChildren,
+          this.options.nodeElement,
           extraHtml
         );
         return treeHtml.htmlUlTpl();

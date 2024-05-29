@@ -9,6 +9,9 @@ const contextMenu = document
 const WFFType = document
   .querySelector("#treeContainer")
   .getAttribute("WFFType");
+const nodeElement = document
+  .querySelector("#treeContainer")
+  .getAttribute("nodeElement");
 const treeLink = document
   .querySelector("#treeContainer")
   .getAttribute("treeLink");
@@ -25,5 +28,6 @@ const options = {
   click: click,
   dbclick: dbclick,
   contextMenu: contextMenu ? contextMenu.split("; ") : "",
+  nodeElement: nodeElement,
 };
 const mainTree = new MainTree(options);

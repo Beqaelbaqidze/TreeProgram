@@ -140,12 +140,40 @@
     </style>
   </head>
   <body>
+    <!-- 
+      attribute describtion of tree (id="treeContainer" is necessary)
+
+      label = label key names and devided by ";"
+      nodeElement = add any string elemen in node. for example(<div class=`text`>anything</div>)
+      click = oneClick function on node, target is binded element 
+      dbclick = oneClick function on node, target is binded element
+      contextMenu = contexmenu list name: here is function and devided by ";"
+
+      styles
+
+      #treeContainer li {}
+      .nodeAttContainer {}
+      #treeContainer {}
+      #treeContainer button {}
+      #treeContainer button svg {}
+      .dark-mode button svg {}
+      .rotated {}
+      .selected {}
+      .nodeAttContainer, .nodeAttContainer div, .nodeAttContainer p {}
+      .context-menu {}
+      .context-menu.active {}
+      .context-menu ul {}
+      .context-menu ul li {}
+      .context-menu ul li:hover {}
+
+    -->
     <div
       id="treeContainer"
       WFFType="TreeView"
       treeLink="?FRAME_NAME=CADTREE.BROWSER.JSON&PRNT_ID"
       baseUrl="http://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree"
       label="name; text"
+      nodeElement=""
       click="foo(target)"
       dbclick="foo(target)"
       contextMenu="Reload: reload(); Add: add();"
