@@ -13,87 +13,15 @@
          License: none (public domain)
       */
 
-      html,
-      body,
-      div,
-      span,
-      applet,
-      object,
-      iframe,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      p,
-      blockquote,
-      pre,
-      a,
-      abbr,
-      acronym,
-      address,
-      big,
-      cite,
-      code,
-      del,
-      dfn,
-      em,
-      img,
-      ins,
-      kbd,
-      q,
-      s,
-      samp,
-      small,
-      strike,
-      strong,
-      sub,
-      sup,
-      tt,
-      var,
-      b,
-      u,
-      i,
-      center,
-      dl,
-      dt,
-      dd,
       ol,
       ul,
       li,
-      fieldset,
-      form,
-      label,
-      legend,
-      table,
-      caption,
       tbody,
       tfoot,
       thead,
       tr,
       th,
-      td,
-      article,
-      aside,
-      canvas,
-      details,
-      embed,
-      figure,
-      figcaption,
-      footer,
-      header,
-      hgroup,
-      menu,
-      nav,
-      output,
-      ruby,
-      section,
-      summary,
-      time,
-      mark,
-      audio,
-      video {
+      td {
         margin: 0;
         padding: 0;
         border: 0;
@@ -102,40 +30,30 @@
         vertical-align: baseline;
       }
       /* HTML5 display-role reset for older browsers */
-      article,
-      aside,
-      details,
-      figcaption,
-      figure,
-      footer,
-      header,
-      hgroup,
-      menu,
-      nav,
-      section {
-        display: block;
-      }
-      body {
-        line-height: 1;
-      }
+
       ol,
       ul {
         list-style: none;
       }
-      blockquote,
-      q {
-        quotes: none;
-      }
-      blockquote:before,
-      blockquote:after,
-      q:before,
-      q:after {
-        content: "";
-        content: none;
-      }
       table {
         border-collapse: collapse;
         border-spacing: 0;
+      }
+
+      .textValue {
+        color: var(--Primary-950, #0f2542);
+        font-size: 12px;
+        font-family: "NotoSansGeorgianRegular";
+        -moz-font-feature-settings: "case";
+        -webkit-font-feature-settings: "case";
+        font-feature-settings: "case" on;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 18px;
+      }
+      body {
+        padding: 0;
+        margin: 0;
       }
     </style>
   </head>
@@ -167,16 +85,19 @@
       .context-menu ul li:hover {}
 
     -->
+
     <div
       id="treeContainer"
       WFFType="TreeView"
       treeLink="?FRAME_NAME=CADTREE.BROWSER.JSON&PRNT_ID"
       baseUrl="http://office.napr.gov.ge/lr-test/bo/landreg-5/cadtree"
-      label="name; text"
+      label="name"
       nodeElement=""
       click="foo(target)"
       dbclick="foo(target)"
       contextMenu="Reload: reload(); Add: add();"
+      searchContentRootElement="#searchContainer"
+      searchLink="?FRAME_NAME=CADTREE.HIERARCHY.JSON&CADCODE="
     ></div>
     <div id="ViewSection" WFFType="ViewSection"></div>
     <script type="module" src="wffMain.js"></script>

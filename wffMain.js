@@ -19,6 +19,12 @@ const baseUrl = document
   .querySelector("#treeContainer")
   .getAttribute("baseUrl");
 const label = document.querySelector("#treeContainer").getAttribute("label");
+const searchContentRootElement = document
+  .querySelector("#treeContainer")
+  .getAttribute("searchContentRootElement");
+const searchLink = document
+  .querySelector("#treeContainer")
+  .getAttribute("searchLink");
 
 const options = {
   baseUrl: baseUrl,
@@ -29,5 +35,7 @@ const options = {
   dbclick: dbclick,
   contextMenu: contextMenu ? contextMenu.split("; ") : "",
   nodeElement: nodeElement,
+  searchContentRootElement: searchContentRootElement,
+  searchLink: baseUrl + searchLink,
 };
 const mainTree = new MainTree(options);

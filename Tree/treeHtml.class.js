@@ -9,7 +9,8 @@ export class TreeHtml {
     baseUrl,
     hasChildren,
     nodeElement,
-    stringHtml = ""
+    stringHtml = "",
+    selectedId
   ) {
     this.id = id;
     this.value = value;
@@ -20,6 +21,7 @@ export class TreeHtml {
     this.hasChildren = hasChildren;
     this.stringHtml = stringHtml;
     this.nodeElement = nodeElement;
+    this.selectedId = selectedId;
   }
 
   responseBuild() {
@@ -31,34 +33,34 @@ export class TreeHtml {
     if (this.stringHtml) {
       return this.stringHtml;
     } else {
-      return `<li id="liNode" ${this.responseBuild()}>
-                <div class="nodeAttContainer" data-id="${
-                  this.id
-                } ${this.responseBuild()}">
+      return `<li id="liNode" main-id="${this.id}" ${this.responseBuild()}>
+                <div class="nodeAttContainer ${
+                  this.selectedId == this.id ? "selected" : ""
+                }" data-id="${this.id}" ${this.responseBuild()} >
                   <button class="DropdownBtn" data-id="${this.id}">
                     ${
                       this.hasChildren
-                        ? `<svg class = "arrow" data-id="${this.id}"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="5"
-                        height="10"
-                        viewBox="0 0 5 10"
-                        fill="none"
-                      >
-                        <path
-                          d="M4.29289 5L0.5 8.79289V1.20711L4.29289 5Z"
-                          fill="#1C1B1F"
-                          stroke="black"
-                        ></path>
-                      </svg>`
+                        ? `
+                            <svg class = "arrow" data-id="${this.id}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                <mask id="mask0_1427_1541" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+                                  <rect x="18" y="18" width="18" height="18" transform="rotate(-180 18 18)" fill="#D9D9D9"/>
+                                </mask>
+                                <g mask="url(#mask0_1427_1541)">
+                                  <path d="M7.9877 6.41249L10.5752 8.99999L7.9877 11.5875L7.9877 6.41249Z" fill="#292929"/>
+                                </g>
+                            </svg>`
                         : ""
                     }
                    </button>
                   <div class="Icons">
-                    <img src="${this.baseUrl + this.icon}">
-                    <img src="${this.baseUrl + this.statusIcon}">
+                    <img src="${this.icon ? this.baseUrl + this.icon : ""}">
+                    <img src="${
+                      this.statusIcon ? this.baseUrl + this.statusIcon : ""
+                    }">
                   </div>
-                  <span class="textValue" ${this.responseBuild()}><p class="textValue">${
+                  <span class="textValue" id="${
+                    this.hasChildren ? "" : "lastElem"
+                  }" ${this.responseBuild()}><p class="textValue">${
         this.value
       }</p>${this.nodeElement} </span>
                 </div>

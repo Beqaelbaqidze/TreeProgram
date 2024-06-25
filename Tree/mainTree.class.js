@@ -1,6 +1,7 @@
 import { HttpClass } from "../http.class.js";
 import { TreeHtml } from "./treeHtml.class.js";
 import { TreeEventHandler } from "./treeFunctions.js";
+import { SearchContent } from "./searchContent.class.js";
 
 export class MainTree {
   #httpClient;
@@ -9,6 +10,7 @@ export class MainTree {
   #chngHtml;
   #rootElement;
   #eventHandler;
+  insertSearch;
 
   constructor(options) {
     this.options = options;
@@ -28,17 +30,37 @@ export class MainTree {
       this.inject.bind(this),
       this.buildHtmlAndInject.bind(this)
     );
-    this.#rootElement.addEventListener(
-      "click",
-      this.#eventHandler.initEvents.bind(this.#eventHandler)
-    );
+    this.#rootElement.addEventListener("click", () => {
+      this.#eventHandler.initEvents.bind(this.#eventHandler);
+    });
+    if (this.options.searchContentRootElement) {
+      const searchContainer = document.querySelector(
+        this.options.searchContentRootElement
+      );
+      if (!searchContainer) {
+        const newSearchContainer = document.createElement("div");
+        newSearchContainer.id = "searchContainer";
+        document.body.insertBefore(
+          newSearchContainer,
+          document.body.firstChild
+        );
+        this.options.searchContentRootElement = "#searchContainer";
+      }
+      this.insertSearch = new SearchContent(
+        this.options.searchContentRootElement,
+        this.options.searchLink,
+        this.#labelKeys,
+        this.options
+      );
+    }
   }
 
   inject(data) {
     this.#treeData = data;
   }
 
-  buildHtmlAndInject(rootElement) {
+  async buildHtmlAndInject(rootElement) {
+    let savedDataId = localStorage.getItem("selectedDataId");
     const extraHtml = this.#chngHtml;
     const html = this.#treeData
       .map((node) => {
@@ -52,12 +74,27 @@ export class MainTree {
           this.options.baseUrl,
           node.hasChildren,
           this.options.nodeElement,
-          extraHtml
+          extraHtml,
+          savedDataId
         );
         return treeHtml.htmlUlTpl();
       })
       .join("");
 
     rootElement.innerHTML += `<ul>${html}</ul>`;
+
+    // Check if the selected element exists before clicking
+    if (savedDataId) {
+      const selectedElement = document.querySelector(
+        `[data-id="${savedDataId}"]`
+      );
+      if (selectedElement) {
+        selectedElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        selectedElement.classList.add("selected");
+      }
+    }
   }
 }
